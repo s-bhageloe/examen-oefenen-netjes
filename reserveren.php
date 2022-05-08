@@ -6,6 +6,8 @@ $db = new DB('localhost', 'root', '', 'oefenexamen', 'utf8mb4'); //hier zet je d
 
 $kamers = $db->getKamers();
 
+$reserveren = $db->showKlantReservering();
+
 if(isset($_POST["submit"])){
     print_r($_POST);
     //fieldnames - input fields

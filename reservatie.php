@@ -3,23 +3,10 @@
 include_once 'database.php';
 
 
-session_start();
-if(!isset($_SESSION['gebruikersnaam'])) {
-    // echo '<h1>Gebruiker is ingelogd</h1>';
-
-
-    header('Location: loginMedewerkers.php');
-
-
-}
-
-
-print_r($_SESSION['gebruikersnaam']);
-// else{
 // Connection made
 $db = new DB('localhost', 'root', '', 'oefenexamen', 'utf8mb4'); //hier zet je de waardes($..) constructor
 
-$klanten = $db->showReservering();
+$klanten = $db->showKlantReservering();
 
 
 //     // User not loggedin

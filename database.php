@@ -121,8 +121,98 @@
                         'start_datum'=>$start_datum,
                         'eind_datum'=>$eind_datum
                     ]);
+
+                    header("location: reservatie.php");
                 }
+
+                public function showKlantReservering(){
+                    try {
+                        // SELECT * FROM "OVERZICHT" JOIN "tabel klant" ON "tabel.placeholder/foreignkey" = "tabel.primarykey"";
+                        $query = "SELECT * FROM reservering JOIN klant ON reservering.klantID_rs = klant.klantID ORDER BY reserveringID DESC LIMIT 1";
+                        
+                        $prep = $this->pdo->prepare($query);
+            
+                        $prep->execute();
+            
+                        $rows = $prep->fetchAll(PDO::FETCH_ASSOC);
+                        
+                        return $rows;
+                    } catch (\Throwable $th) {
+                        throw $th;
+                    }
+                }
+
+                public function showKamer(){
+                    try {
+
+                        $query = "SELECT * FROM kamer";
+                        
+                        $prep = $this->pdo->prepare($query);
+            
+                        $prep->execute();
+            
+                        $rows = $prep->fetchAll(PDO::FETCH_ASSOC);
+                        
+                        return $rows;
+                    } catch (\Throwable $th) {
+                        throw $th;
+                    }
+                }
+
+                public function selectSpecificKlant($reserveringklantid){
+                    try {
+                        $query = "SELECT * FROM reservering WHERE klantID_rs = :klantID_rs";
+            
+                        $prep = $this->pdo->prepare($query);
+            
+                        $prep->execute([
+                            'klantID_rs' => $reserveringklantid
+                        ]);
+            
+                        $row = $prep->fetch(PDO::FETCH_ASSOC);
+                    
+                        return $row;
+                    } catch (\Throwable $th) {
+                        throw $th;
+                    }
+                }
+
+                
+                function updateKlant($klantID_rs, $kamernummer, $start_datum, $eind_datum){
+                    $query = "UPDATE reservering SET kamerID_rs = :kamerID_rs, start_datum = :start_datum, eind_datum = :eind_datum WHERE klantID_rs = :klantID_rs;";
+
+                    $prep = $this->pdo->prepare($query);
+
+                    $prep->execute([
+                        'klantID_rs' => $klantID_rs,
+                        'kamerID_rs' => $kamernummer,
+                        'start_datum' => $start_datum,
+                        'eind_datum' => $eind_datum
+                    ]);
+
+                    header("Location: reserverings_overzicht.php");
+
+                    }
+
+                    public function deleteReservering($reserveer){
+                        try {
+                            $query = $this->pdo->prepare(
+                                "DELETE FROM reservering
+                                 WHERE klantID_rs = :klantID_rs;"
+                            );
+                
+                            $query->execute([
+                                'klantID_rs' => $reserveer
+                            ]);
+                
+                            header("Location: reserverings_overzicht.php");
+                        } catch (\PDOException $e) {
+                            throw $e;
+                        }
+                    }
      }
 
+
+    
     
 ?>
